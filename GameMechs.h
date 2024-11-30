@@ -41,6 +41,7 @@ class GameMechs
         
         int getScore() const;
         void incrementScore();
+        void incrementScore(int inc);   // overload for bonus features 
         
         // More methods should be added here
 };

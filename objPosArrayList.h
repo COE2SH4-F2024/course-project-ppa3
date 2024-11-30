@@ -18,6 +18,7 @@ class objPosArrayList
 
         int getSize() const;
         void insertHead(objPos thisPos);
+        void insertHead(int x, int y, char s);  // overload by me
         void insertTail(objPos thisPos);
         void removeHead();
         void removeTail();

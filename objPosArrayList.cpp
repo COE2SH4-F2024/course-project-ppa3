@@ -37,6 +37,20 @@ void objPosArrayList::insertHead(objPos thisPos)
     }
 }
 
+void objPosArrayList::insertHead(int x, int y, char s)
+{
+    if (listSize<arrayCapacity)
+    {
+        listSize++;
+        int i;
+        for (i=listSize;i>=0;i--)
+        {
+            aList[i+1].setObjPos(aList[i]);
+        }
+        aList[0].setObjPos(x,y,s);
+    }
+}
+
 void objPosArrayList::insertTail(objPos thisPos)
 {
     if (listSize < arrayCapacity)

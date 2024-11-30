@@ -27,10 +27,11 @@ class Player
 
         // More methods to be added here
         bool checkFoodConsumption();
-        void increasePlayerLength();
+        
 
     private:
-        objPosArrayList* playerPosList; // Upgrade this in iteration 3.       
+        objPosArrayList* playerPosList; // Upgrade this in iteration 3.
+        objPos newPlayerPos;   
         enum Dir myDir;
 
         // Need a reference to the Main Game Mechanisms
