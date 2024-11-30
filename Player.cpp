@@ -1,14 +1,15 @@
 #include "Player.h"
 
 
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
 {
     mainGameMechsRef = thisGMRef;
+    mainFoodRef = thisFoodRef;
     myDir = STOP;
 
     // more actions to be included
 
-    objPos startPos(thisGMRef->getBoardSizeX()/2,thisGMRef->getBoardSizeY()/2,'*');
+    objPos startPos(mainGameMechsRef->getBoardSizeX()/2,mainGameMechsRef->getBoardSizeY()/2,'*');
 
     playerPosList = new objPosArrayList;
     playerPosList->insertHead(startPos);
@@ -29,7 +30,7 @@ Player::Player(GameMechs* thisGMRef)
     playerPosList->insertHead(startPos5);
     playerPosList->insertHead(startPos6);
     playerPosList->insertHead(startPos7);
-    
+
     */
 }
 
@@ -50,7 +51,7 @@ void Player::updatePlayerDir()
 {
         // PPA3 input processing logic
 
-    const char shutdownKey = 27, upKey = 'w', leftKey = 'a', downKey = 's', rightKey = 'd', loseKey = 'x', scoreKey = 'z';
+    const char shutdownKey = 27, upKey = 'w', leftKey = 'a', downKey = 's', rightKey = 'd', loseKey = 'x', scoreKey = 'z', foodKey = 'f';
 
     if(mainGameMechsRef->getInput() != 0)  // if not null character
     {
@@ -77,6 +78,9 @@ void Player::updatePlayerDir()
             case loseKey:
                 mainGameMechsRef->setLoseFlag();
                 mainGameMechsRef->setExitTrue();
+                break;
+            case foodKey:
+                mainFoodRef->generateFood(playerPosList, *mainGameMechsRef);
                 break;
             default:
                 break;
@@ -119,8 +123,33 @@ void Player::movePlayer()
             break;
     }
 
-    playerPosList->removeTail();    // Did this first to avoid issues nearing 200 elements
-    playerPosList->insertHead(newPlayerPos);
+    
+
+    if (checkFoodConsumption())
+    {
+        if (playerPosList->getSize() >= ARRAY_MAX_CAP) playerPosList->removeTail(); // Avoiding misbehaviour around capacity
+        
+        playerPosList->insertHead(newPlayerPos);    // Not in the method or we'd have to pass in newPlayerPos
+
+        increasePlayerLength();     // I'd love to just remove this method tbh it's useless and they say we have freedom
+    }
+
+    else
+    {
+        playerPosList->removeTail();    // We cannot do this in reverse because motion would misbehave at capacity
+        playerPosList->insertHead(newPlayerPos);
+    }
 }
 
 // More methods to be added
+bool Player::checkFoodConsumption()
+{
+    objPos foodPos = mainFoodRef->getFoodPos();
+    return (playerPosList->getHeadElement().isPosEqual(&foodPos));
+}
+
+void Player::increasePlayerLength()
+{   
+    mainFoodRef->generateFood(playerPosList, *mainGameMechsRef);
+    mainGameMechsRef->incrementScore();
+}

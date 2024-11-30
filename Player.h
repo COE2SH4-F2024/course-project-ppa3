@@ -4,6 +4,7 @@
 #include "GameMechs.h"
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "Food.h"   // I'm like 80% sure we are allowed to do this
 
 class Player
 {
@@ -17,7 +18,7 @@ class Player
     public:
         enum Dir {UP, DOWN, LEFT, RIGHT, STOP};  // This is the direction state
 
-        Player(GameMechs* thisGMRef);
+        Player(GameMechs* thisGMRef, Food* thisFoodRef);    // The player needs to be able to cause food regen
         ~Player();
 
         objPosArrayList* getPlayerPos() const; // Upgrade this in iteration 3.       
@@ -25,6 +26,8 @@ class Player
         void movePlayer();
 
         // More methods to be added here
+        bool checkFoodConsumption();
+        void increasePlayerLength();
 
     private:
         objPosArrayList* playerPosList; // Upgrade this in iteration 3.       
@@ -32,6 +35,7 @@ class Player
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
+        Food* mainFoodRef;
 };
 
 #endif

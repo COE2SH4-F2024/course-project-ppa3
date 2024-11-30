@@ -15,7 +15,7 @@ Food::~Food()
     // What to do here?
 }
 
-void Food::generateFood(objPos blockOff, GameMechs mechs)
+void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
 {
     /*
     HEAR ME OUT
@@ -35,29 +35,33 @@ void Food::generateFood(objPos blockOff, GameMechs mechs)
     int randX, randY, flag;
     char randS;
     
-    do 
+    flag = 0;
+    while (flag == 0)
     {
         randX=rand()%(boardX-1);
         randY=rand()%(boardY-1);
-        flag = randX && randY;  // If either of these is 0 it's in the border, so we go again
-        if ((randX == blockOff.pos->x) && (randY == blockOff.pos->y))
-        {
-            flag = 0;   // if the blocked-off coordinate (i.e. the player's location) == the chosen coordinate, try again
-        }
-    } while (flag == 0);
-
-    do
-    {
-        flag = 1;
         randS = 33+(rand()%94);   // i.e. [33, 126], alphanumeric but not spacebar
+        
+        if (!(randX && randY)) continue;  // If either of these is 0 it's in the border, so we go again
 
-        if (randS == blockOff.getSymbol()   ||  randS == '#')   // Do we need to hardcode #? Is there a better approach?
+        if (randS == '*' || randS == ' ' || randS == '#') continue;
+
+        foodPos.setObjPos(randX, randY, randS); // This will be changed if something's wrong
+
+        int k, snakeLength;
+        snakeLength = blockOff->getSize();
+
+        flag = 1;
+
+        for (k=0; k<snakeLength; k++) 
         {
-            flag = 0;
+            if (blockOff->getElement(k).isPosEqual(&foodPos))
+            {
+                flag = 0;
+                break;
+            }
         }
-    } while (flag == 0);
-
-    foodPos.setObjPos(randX,randY,randS);
+    }
 }
 
 objPos const Food::getFoodPos()

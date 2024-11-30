@@ -6,7 +6,7 @@
 
 #include "GameMechs.h"
 #include "Player.h"
-#include "Food.h"
+//#include "Food.h"
 
 using namespace std;
 
@@ -49,11 +49,11 @@ void Initialize(void)
     MacUILib_clearScreen();
 
     mechs = new GameMechs();
-    //  debug: cout << "hello!";
-    player = new Player(mechs);
     pFood = new Food;
+    player = new Player(mechs, pFood);
+    
 
-    pFood->generateFood(player->getPlayerPos()->getHeadElement(), *mechs);
+    pFood->generateFood(player->getPlayerPos(), *mechs);
 }
 
 void GetInput(void)
@@ -68,17 +68,9 @@ void RunLogic(void)
 {
     if (mechs->getInput() != 0)
     {
-        // Temporary food debug logic
-        if (mechs->getInput() == 'g')
-        {
-            pFood->generateFood(player->getPlayerPos()->getHeadElement(), *mechs);
-        }
-        
         player->updatePlayerDir();
     }
     player->movePlayer();
-
-    
 }
 
 void DrawScreen(void)

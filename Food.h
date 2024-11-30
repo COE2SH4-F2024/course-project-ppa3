@@ -9,6 +9,6 @@ class Food
         Food(); // Default Constructor
         ~Food();    // Destroyer
 
-        void generateFood(objPos blockOff, GameMechs mechs);
+        void generateFood(objPosArrayList* blockOff, GameMechs mechs);
         objPos const getFoodPos();
 };
