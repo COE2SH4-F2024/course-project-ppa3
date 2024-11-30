@@ -1,6 +1,5 @@
 #include "objPosArrayList.h"
-#include <iostream> // delete this eventually
-using namespace std;    // also delete this eventually
+
 
 // Check lecture contents on general purpose array list construction, 
 // and modify it to support objPos array list construction.
@@ -11,10 +10,6 @@ objPosArrayList::objPosArrayList()
     arrayCapacity = ARRAY_MAX_CAP;
     listSize = 0; 
     int i;
-    for (i=0; i<arrayCapacity; i++)
-    {
-        aList[i].setObjPos(0,0,0);
-    }
 }
 
 objPosArrayList::~objPosArrayList()

@@ -38,11 +38,11 @@ objPos& objPos::operator=(const objPos &a)  // Assignment Operator Overload
 {
     if (this != &a)
     {
-        pos = new Pos;
-        pos->x = a.pos->x;
-        pos->y = a.pos->y;
-        symbol = a.symbol;
+        this->pos->x = a.pos->x;
+        this->pos->y = a.pos->y;
+        this->symbol = a.symbol;
     }
+    return *this;
 }
 
 void objPos::setObjPos(objPos o)

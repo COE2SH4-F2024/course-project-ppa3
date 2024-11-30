@@ -6,9 +6,31 @@ Player::Player(GameMechs* thisGMRef)
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
 
-    playerPos.setObjPos(10,10,'*');
-
     // more actions to be included
+
+    objPos startPos(thisGMRef->getBoardSizeX()/2,thisGMRef->getBoardSizeY()/2,'*');
+
+    playerPosList = new objPosArrayList;
+    playerPosList->insertHead(startPos);
+
+    /*
+    This block will start the player off with length 7 for debugging purposes.
+
+    objPos startPos2(thisGMRef->getBoardSizeX()/2+1,thisGMRef->getBoardSizeY()/2,'*');  
+    objPos startPos3(thisGMRef->getBoardSizeX()/2+2,thisGMRef->getBoardSizeY()/2,'*');
+    objPos startPos4(thisGMRef->getBoardSizeX()/2+3,thisGMRef->getBoardSizeY()/2,'*');  
+    objPos startPos5(thisGMRef->getBoardSizeX()/2+4,thisGMRef->getBoardSizeY()/2,'*');
+    objPos startPos6(thisGMRef->getBoardSizeX()/2+5,thisGMRef->getBoardSizeY()/2,'*');  
+    objPos startPos7(thisGMRef->getBoardSizeX()/2+6,thisGMRef->getBoardSizeY()/2,'*');
+
+    playerPosList->insertHead(startPos2);
+    playerPosList->insertHead(startPos3);
+    playerPosList->insertHead(startPos4);
+    playerPosList->insertHead(startPos5);
+    playerPosList->insertHead(startPos6);
+    playerPosList->insertHead(startPos7);
+    
+    */
 }
 
 
@@ -18,10 +40,10 @@ Player::~Player()
     // idk that we have any lmfao
 }
 
-objPos Player::getPlayerPos() const
+objPosArrayList* Player::getPlayerPos() const
 {
     // return the reference to the playerPos arrray list
-    return playerPos;
+    return playerPosList;
 }
 
 void Player::updatePlayerDir()
@@ -69,28 +91,36 @@ void Player::movePlayer()
     // [TODO] : Next, you need to update the player location by 1 unit 
     //          in the direction stored in the program
 
-    int xWrap = mainGameMechsRef->getBoardSizeX()-2;
+    int xWrap = mainGameMechsRef->getBoardSizeX()-2;    // These exist to minimize extra calls
     int yWrap = mainGameMechsRef->getBoardSizeY()-2;
+
+    objPos newPlayerPos = playerPosList->getHeadElement();
 
     switch(myDir)
     {
         case DOWN:
-            playerPos.pos->y %= (yWrap); // if about to hit the border, wrap around
-            playerPos.pos->y++;
+            newPlayerPos.pos->y %= yWrap; // if about to hit the border, wrap around
+            newPlayerPos.pos->y++;
             break;
         case LEFT:
-            playerPos.pos->x--;
-            if (!playerPos.pos->x) {playerPos.pos->x = xWrap;} // if in the border, wrap around
+            newPlayerPos.pos->x--;
+            if (!newPlayerPos.pos->x) {newPlayerPos.pos->x = xWrap;} // if in the border, wrap around
             break;
         case UP:
-            playerPos.pos->y--;
-            if (!playerPos.pos->y) {playerPos.pos->y = yWrap;}
+            newPlayerPos.pos->y--;
+            if (!newPlayerPos.pos->y) {newPlayerPos.pos->y = yWrap;}
             break;
         case RIGHT:
-            playerPos.pos->x %= (xWrap);
-            playerPos.pos->x++;
+            newPlayerPos.pos->x %= xWrap;
+            newPlayerPos.pos->x++;
+            break;
+        case STOP:
+            return;     // To avoid adding to the square we are already on
             break;
     }
+
+    playerPosList->removeTail();    // Did this first to avoid issues nearing 200 elements
+    playerPosList->insertHead(newPlayerPos);
 }
 
 // More methods to be added

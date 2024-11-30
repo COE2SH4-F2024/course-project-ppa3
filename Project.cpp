@@ -53,7 +53,7 @@ void Initialize(void)
     player = new Player(mechs);
     pFood = new Food;
 
-    pFood->generateFood(player->getPlayerPos(), *mechs);
+    pFood->generateFood(player->getPlayerPos()->getHeadElement(), *mechs);
 }
 
 void GetInput(void)
@@ -71,7 +71,7 @@ void RunLogic(void)
         // Temporary food debug logic
         if (mechs->getInput() == 'g')
         {
-            pFood->generateFood(player->getPlayerPos(), *mechs);
+            pFood->generateFood(player->getPlayerPos()->getHeadElement(), *mechs);
         }
         
         player->updatePlayerDir();
@@ -96,17 +96,27 @@ void DrawScreen(void)
             if (j==0||i==0||j+1==boardX||i+1==boardY)
             {
                 MacUILib_printf("%c", '#');
-                // MacUILib_printf("%d", mechs->getBoardSizeY()); //debug
-            }
-            else if (player->getPlayerPos().pos->x==j && player->getPlayerPos().pos->y==i)
-            {
-                MacUILib_printf("%c", player->getPlayerPos().symbol);
             }
             else if (pFood->getFoodPos().pos->x==j && pFood->getFoodPos().pos->y==i)
             {
                 MacUILib_printf("%c", pFood->getFoodPos().symbol);
             }
-            else {MacUILib_printf("%c", ' ');}
+            
+            else
+            {
+                int k, snakeLength;
+                snakeLength = player->getPlayerPos()->getSize();
+
+                for(k=0; k<snakeLength; k++)
+                {
+                    if (player->getPlayerPos()->getElement(k).pos->x==j && player->getPlayerPos()->getElement(k).pos->y==i)
+                    {
+                        MacUILib_printf("%c", player->getPlayerPos()->getElement(k).symbol);
+                        break;
+                    }
+                }
+                if (k==snakeLength) MacUILib_printf("%c", ' ');
+            }
         }
         MacUILib_printf("\n"); // Vertical spacing
     }

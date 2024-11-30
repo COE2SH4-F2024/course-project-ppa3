@@ -1,6 +1,4 @@
 #include "objPos.h"
-#include <iostream> // delete eventually
-using namespace std;    // also delete eventually
 
 objPos::objPos()    // Constructor
 {
@@ -24,8 +22,6 @@ objPos::objPos(int xPos, int yPos, char sym)
 objPos::~objPos()   // Destructor
 {
     delete pos;
-    cout << "blew an objPos!\n";
-
 }
 
 
@@ -50,6 +46,16 @@ objPos& objPos::operator=(const objPos &a)  // Assignment Operator Overload
         this->symbol = a.symbol;
     }
     return *this;
+    /*
+    if (this != &a)
+    {
+        pos = new Pos
+        pos->x = a.pos->x;
+        pos->y = a.pos->y;
+        symbol = a.symbol;
+    }
+    What's the difference?
+    */
 }
 
 
