@@ -21,6 +21,29 @@ objPos::objPos(int xPos, int yPos, char sym)
 
 
 
+objPos::objPos(const objPos &a) // Copy Constructor
+{
+    pos = new Pos;
+    pos->x = a.pos->x;
+    pos->y = a.pos->y;
+    symbol = a.symbol;
+}
+
+objPos::~objPos()   // Destructor. CHECK THAT THIS WORKS
+{
+    delete pos;
+}
+
+objPos& objPos::operator=(const objPos &a)  // Assignment Operator Overload
+{
+    if (this != &a)
+    {
+        pos = new Pos;
+        pos->x = a.pos->x;
+        pos->y = a.pos->y;
+        symbol = a.symbol;
+    }
+}
 
 void objPos::setObjPos(objPos o)
 {

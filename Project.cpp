@@ -6,6 +6,7 @@
 
 #include "GameMechs.h"
 #include "Player.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -13,6 +14,7 @@ using namespace std;
 
 GameMechs *mechs; // Should be deleted one day
 Player *player; // Should also go away
+Food *pFood; // We don't like globals >:(
 
 void Initialize(void);
 void GetInput(void);
@@ -47,8 +49,11 @@ void Initialize(void)
     MacUILib_clearScreen();
 
     mechs = new GameMechs();
-    cout << "hello!";
+    //  debug: cout << "hello!";
     player = new Player(mechs);
+    pFood = new Food;
+
+    pFood->generateFood(player->getPlayerPos(), *mechs);
 }
 
 void GetInput(void)
@@ -63,22 +68,32 @@ void RunLogic(void)
 {
     if (mechs->getInput() != 0)
     {
+        // Temporary food debug logic
+        if (mechs->getInput() == 'g')
+        {
+            pFood->generateFood(player->getPlayerPos(), *mechs);
+        }
+        
         player->updatePlayerDir();
     }
     player->movePlayer();
+
+    
 }
 
 void DrawScreen(void)
 {
     MacUILib_clearScreen();  
     
-    int i,j;
+    int i,j,boardX,boardY;
+    boardX=mechs->getBoardSizeX();
+    boardY=mechs->getBoardSizeY();
 
-    for (i=0; i<mechs->getBoardSizeY(); i++)
+    for (i=0; i<boardY; i++)
     {
-        for (j=0; j<mechs->getBoardSizeX(); j++)
+        for (j=0; j<boardX; j++)
         {
-            if (j==0||i==0||j+1==(mechs->getBoardSizeX())||i+1==(mechs->getBoardSizeY()))
+            if (j==0||i==0||j+1==boardX||i+1==boardY)
             {
                 MacUILib_printf("%c", '#');
                 // MacUILib_printf("%d", mechs->getBoardSizeY()); //debug
@@ -87,11 +102,16 @@ void DrawScreen(void)
             {
                 MacUILib_printf("%c", player->getPlayerPos().symbol);
             }
+            else if (pFood->getFoodPos().pos->x==j && pFood->getFoodPos().pos->y==i)
+            {
+                MacUILib_printf("%c", pFood->getFoodPos().symbol);
+            }
             else {MacUILib_printf("%c", ' ');}
         }
         MacUILib_printf("\n"); // Vertical spacing
     }
     MacUILib_printf("Score: %d", mechs->getScore());
+    //MacUILib_printf("Player X: %d", player->getPlayerPos().pos->x);     // debug
 }
 
 void LoopDelay(void)
@@ -108,6 +128,6 @@ void CleanUp(void)
 
     delete player;
     delete mechs;
-
+    delete pFood;
     MacUILib_uninit();
 }

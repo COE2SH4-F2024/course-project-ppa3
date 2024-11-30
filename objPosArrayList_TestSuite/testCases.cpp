@@ -47,12 +47,14 @@ void testConstructor()
 	// Then check all elements in the array are zero-initialized via objPos() default constructor
 	for(int i = 0; i < ARRAY_MAX_CAP; i++)
 	{
+		cout << "working";	// debug. after getElement(), this will not print indicating smth broke
+		cout << thisList.getHeadElement().pos->x;	// debug. the head element has a garbage value.
 		currentPos = thisList.getElement(i);
 		actualCheck = zeroPos.isPosEqual(&currentPos);
 
 		result &= assert_equal(expectedCheck, actualCheck);
 	}
-
+	
 	// The destructor will be called automatically for stack-allocated objects
 
 	tearDown(result);

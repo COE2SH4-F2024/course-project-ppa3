@@ -24,13 +24,18 @@ objPos::~objPos()   // Destructor
     delete pos;
 }
 
+
 objPos::objPos(const objPos &a) // Copy Constructor
 {
     pos = new Pos;
-    pos->x = a.pos->x;
-    pos->y = a.pos->y;
+    if (a.pos != 0)
+    {
+        pos->x = a.pos->x;
+        pos->y = a.pos->y;
+    }
     symbol = a.symbol;
 }
+
 
 objPos& objPos::operator=(const objPos &a)  // Assignment Operator Overload
 {
@@ -75,7 +80,7 @@ char objPos::getSymbol() const
 
 bool objPos::isPosEqual(const objPos* refPos) const
 {
-    return (refPos->pos->x == pos->x && refPos->pos->y == pos->y);
+    return ((refPos->pos->x == pos->x) && (refPos->pos->y == pos->y));
 }
 
 char objPos::getSymbolIfPosEqual(const objPos* refPos) const

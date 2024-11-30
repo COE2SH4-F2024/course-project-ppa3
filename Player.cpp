@@ -69,22 +69,25 @@ void Player::movePlayer()
     // [TODO] : Next, you need to update the player location by 1 unit 
     //          in the direction stored in the program
 
+    int xWrap = mainGameMechsRef->getBoardSizeX()-2;
+    int yWrap = mainGameMechsRef->getBoardSizeY()-2;
+
     switch(myDir)
     {
         case DOWN:
-            playerPos.pos->y %= (mainGameMechsRef->getBoardSizeY()-2); // if about to hit the border, wrap around
+            playerPos.pos->y %= (yWrap); // if about to hit the border, wrap around
             playerPos.pos->y++;
             break;
         case LEFT:
             playerPos.pos->x--;
-            if (!playerPos.pos->x) {playerPos.pos->x = mainGameMechsRef->getBoardSizeX()-2;} // if in the border, wrap around
+            if (!playerPos.pos->x) {playerPos.pos->x = xWrap;} // if in the border, wrap around
             break;
         case UP:
             playerPos.pos->y--;
-            if (!playerPos.pos->y) {playerPos.pos->y = mainGameMechsRef->getBoardSizeY()-2;}
+            if (!playerPos.pos->y) {playerPos.pos->y = yWrap;}
             break;
         case RIGHT:
-            playerPos.pos->x %= (mainGameMechsRef->getBoardSizeX()-2);
+            playerPos.pos->x %= (xWrap);
             playerPos.pos->x++;
             break;
     }
