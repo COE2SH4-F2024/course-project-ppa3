@@ -1,4 +1,6 @@
 #include "objPos.h"
+#include <iostream> // delete eventually
+using namespace std;    // also delete eventually
 
 objPos::objPos()    // Constructor
 {
@@ -22,13 +24,15 @@ objPos::objPos(int xPos, int yPos, char sym)
 objPos::~objPos()   // Destructor
 {
     delete pos;
+    cout << "blew an objPos!\n";
+
 }
 
 
 objPos::objPos(const objPos &a) // Copy Constructor
 {
     pos = new Pos;
-    if (a.pos != 0)
+    if (a.pos != 0)     // NOT a null ptr
     {
         pos->x = a.pos->x;
         pos->y = a.pos->y;
@@ -38,14 +42,14 @@ objPos::objPos(const objPos &a) // Copy Constructor
 
 
 objPos& objPos::operator=(const objPos &a)  // Assignment Operator Overload
-{
+{   
     if (this != &a)
     {
-        pos = new Pos;
-        pos->x = a.pos->x;
-        pos->y = a.pos->y;
-        symbol = a.symbol;
+        this->pos->x = a.pos->x;
+        this->pos->y = a.pos->y;
+        this->symbol = a.symbol;
     }
+    return *this;
 }
 
 

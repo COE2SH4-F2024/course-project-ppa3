@@ -14,7 +14,6 @@ objPosArrayList::objPosArrayList()
     for (i=0; i<arrayCapacity; i++)
     {
         aList[i].setObjPos(0,0,0);
-        cout << aList[i].pos->x;    // delete this
     }
 }
 
@@ -44,8 +43,11 @@ void objPosArrayList::insertHead(objPos thisPos)
 
 void objPosArrayList::insertTail(objPos thisPos)
 {
-    listSize++;
-    aList[listSize].setObjPos(thisPos);
+    if (listSize < arrayCapacity)
+    {
+        aList[listSize].setObjPos(thisPos);
+        listSize++;
+    }
 }
 
 void objPosArrayList::removeHead()
@@ -91,9 +93,10 @@ objPos objPosArrayList::getElement(int index) const
     {
         index = 0;
     }
-    else if (index >= listSize)
+    else if (index >= arrayCapacity)    // Lecture suggests to use listSize here instead, but the test case would cause seg fault
     {
-        index = listSize - 1;
+        index = arrayCapacity - 1;      // Due to this. In first case, listSize is 0 so you reference aList[-1]
     }
     return aList[index];
-}
+}   // We want no 'out of bounds' access but the test cases explicitly want to be able to access anything on the whole 200-member heap array
+    // This implementation prevents seg fault but could cause semantic errors - BE CAREFUL
