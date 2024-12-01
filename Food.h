@@ -6,6 +6,10 @@ class Food
     private:
         objPos foodPos;
         objPosArrayList* foodBucket;
+
+        char* specials;
+        int specialMenuLength;
+
     public:
         Food(); // Default Constructor
         ~Food();    // Destroyer
@@ -14,5 +18,6 @@ class Food
 
         objPos const getFoodPos();
         objPos const getFoodPos(int index);
-        objPosArrayList* const getFoodBucket();
+        objPosArrayList* const getFoodBucket();    
+        
 };

@@ -104,15 +104,45 @@ void Player::movePlayer()
             break;
     }
 
-    /*
-    Must insert head before removing tail
-    If not, food may generate in front of snake. Solution would be overly complicated
-    Consequence: at array capacity you cannot move forward, because insertHead fails.
-    We shall accept this and move on for now
-    */
+    
 
     playerPosList->insertHead(newPlayerPos);
 
+    char eatenSymbol = checkFoodConsumption();  // null if nothing eaten, else it's the character we just ate
+    
+    if (eatenSymbol != 0)
+    {
+        switch (eatenSymbol)
+        {
+            case '+':
+                invulnerability ++;
+                mainGameMechsRef->incrementScore();
+                break;
+
+            case '-':   // Shrink by 1 if big enough, but increase score by 2
+                mainGameMechsRef->incrementScore(2);
+                if(playerPosList->getSize() > 2)
+                {
+                    playerPosList->removeTail(2);
+                }                    
+                break;
+            
+            default:
+                mainGameMechsRef->incrementScore();
+                break;
+
+        }
+        mainFoodRef->generateFood(playerPosList, *mainGameMechsRef);    // If something was eaten regenerate all food
+
+    }
+    else playerPosList->removeTail();   // If we didn't eat anything, head grew so tail must shrink
+        
+
+        
+
+
+    
+    /*
     if (checkFoodConsumption())   // I envision this becoming a switch statement once we add different kinds of food
     {
         //will get rid of hard code later
@@ -144,12 +174,12 @@ void Player::movePlayer()
         mainFoodRef->generateFood(playerPosList, *mainGameMechsRef);
     }
     else playerPosList->removeTail();
-
+    */
     
 
     //Lose condition check <- iterate starting from second element
 
-    if (playerPosList->checkFor(newPlayerPos, 65536, 1))
+    if (playerPosList->checkFor(newPlayerPos, -1, 1))
     {
         if (!invulnerability)
             {
@@ -179,13 +209,17 @@ void Player::movePlayer()
         }
     }
     */
+
+   // Movement is unsupported if the list is at capacity, so we will make this a win condition.
+    if (playerPosList->atCapacity() == true)     
+        mainGameMechsRef->setExitTrue();
 }
 
 // More methods to be added
-bool Player::checkFoodConsumption()
+char Player::checkFoodConsumption()
 {
     //will get rid of hard code later
-    return mainFoodRef->getFoodBucket()->checkFor(newPlayerPos);
+    return mainFoodRef->getFoodBucket()->getSymbolIfHas(newPlayerPos);
 }
 
 int Player::getLives()

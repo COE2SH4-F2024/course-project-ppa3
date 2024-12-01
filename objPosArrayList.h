@@ -17,6 +17,7 @@ class objPosArrayList
         ~objPosArrayList();
 
         int getSize() const;
+        bool atCapacity() const;    // added by me
         void insertHead(objPos thisPos);
         void insertHead(int x, int y, char s);  // overload by me
         void insertTail(objPos thisPos);
@@ -31,6 +32,7 @@ class objPosArrayList
         bool checkFor(objPos myPos);   // implemented to modularize list indexing
         bool checkFor(objPos myPos, int manualSize);   // overload of above
         bool checkFor(objPos myPos, int manualSize, int iStart);   // overload of above
+        char getSymbolIfHas(objPos myPos);
 };
 
 #endif

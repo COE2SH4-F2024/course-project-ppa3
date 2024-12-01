@@ -26,7 +26,7 @@ class Player
         void movePlayer();
 
         // More methods to be added here
-        bool checkFoodConsumption();
+        char checkFoodConsumption();
 
         int getLives();
         

@@ -135,8 +135,19 @@ void LoopDelay(void)
 void CleanUp(void)
 {
     MacUILib_clearScreen();
-    if(mechs->getLoseFlagStatus() == true) {MacUILib_printf("You lose!");}
-    else {MacUILib_printf("Terminated successfully!");}
+    if(mechs->getLoseFlagStatus() == true) 
+    {
+        MacUILib_printf("You lose!\n");
+    }
+    else if (player->getPlayerPos()->atCapacity())
+        {
+            MacUILib_printf("You win! The snake has become so large that it cannot physically move.\n");
+            MacUILib_printf("For the first time since its creation in 1976, the snake from Snake can finally rest peacefully.\n");
+            MacUILib_printf("If you made it this far, we should have set the array capacity higher :)\n");
+        }
+    
+    else MacUILib_printf("Terminated successfully!\n");
+    MacUILib_printf("Your final score: %d", mechs->getScore());
 
     delete player;
     

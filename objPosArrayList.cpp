@@ -23,6 +23,12 @@ int objPosArrayList::getSize() const
     return listSize;
 }
 
+bool objPosArrayList::atCapacity() const    // Manually added to check if the snake (or any other list) is full
+{
+    if (listSize == arrayCapacity) return true;
+    return false;
+}
+
 void objPosArrayList::insertHead(objPos thisPos)
 {
     if (listSize<arrayCapacity)
@@ -146,13 +152,31 @@ bool objPosArrayList::checkFor(objPos myPos, int manualSize, int iStart)
 {
     
     int i;
-    if (manualSize > listSize)  manualSize = listSize;  // no seg fault
+    if (manualSize < 0 || manualSize > listSize)  manualSize = listSize;  // no seg fault
 
     for (i=iStart; i<manualSize; i++)     
     {
         if (getElement(i).isPosEqual(&myPos))   return true;
     }
     return false;   
+}
+
+char objPosArrayList::getSymbolIfHas(objPos myPos)
+{
+    int i;
+    char mySymbol;
+    for (i=0; i<listSize; i++)
+    {
+        /*
+        Check if myPos [ideally new position of head] and element of the list [ideally food bucket] coincide
+        If so, collect and return the symbol from the matching element
+        If not, getSymbolIfPosEqual will return null and nothing will return
+        */
+
+        mySymbol = getElement(i).getSymbolIfPosEqual(&myPos);
+        if (mySymbol != 0)   return mySymbol;
+    }
+    return 0;
 }
 // Paste your Tested implementation here.
 // Paste your Tested implementation here.
