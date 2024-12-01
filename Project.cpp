@@ -11,6 +11,7 @@
 using namespace std;
 
 #define DELAY_CONST 100000
+#define FOODS 5
 
 GameMechs *mechs; // Should be deleted one day
 Player *player; // Should also go away
@@ -49,7 +50,7 @@ void Initialize(void)
     MacUILib_clearScreen();
 
     mechs = new GameMechs();
-    pFood = new Food;
+    pFood = new Food();
     player = new Player(mechs, pFood);
     
 
@@ -80,6 +81,7 @@ void DrawScreen(void)
     int i,j,boardX,boardY;
     boardX=mechs->getBoardSizeX();
     boardY=mechs->getBoardSizeY();
+    bool foodFlag = false; //simplifies implementation
 
     for (i=0; i<boardY; i++)
     {
@@ -89,15 +91,22 @@ void DrawScreen(void)
             {
                 MacUILib_printf("%c", '#');
             }
-            else if (pFood->getFoodPos().pos->x==j && pFood->getFoodPos().pos->y==i)
-            {
-                MacUILib_printf("%c", pFood->getFoodPos().symbol);
-            }
-            
             else
             {
                 int k, snakeLength;
                 snakeLength = player->getPlayerPos()->getSize();
+
+                foodFlag = false;
+
+                for (int k = 0; k< FOODS; k++)
+                {
+                    if(pFood->getFoodPos(k).pos->x == j && pFood->getFoodPos(k).pos->y == i)
+                    {
+                        MacUILib_printf("%c", pFood->getFoodPos(k).symbol);
+                        foodFlag = true;
+                        break;
+                    }
+                }
 
                 for(k=0; k<snakeLength; k++)
                 {
@@ -107,7 +116,7 @@ void DrawScreen(void)
                         break;
                     }
                 }
-                if (k==snakeLength) MacUILib_printf("%c", ' ');
+                if (k==snakeLength && !foodFlag) MacUILib_printf("%c", ' ');
             }
         }
         MacUILib_printf("\n"); // Vertical spacing

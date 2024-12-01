@@ -107,8 +107,30 @@ void Player::movePlayer()
 
     if (checkFoodConsumption())   // I envision this becoming a switch statement once we add different kinds of food
     {
+        //will get rid of hard code later
+        for(int i = 0; i < 5; i++)
+        {
+            if(mainFoodRef->getFoodPos(i).pos->x == newPlayerPos.pos->x && mainFoodRef->getFoodPos(i).pos->y == newPlayerPos.pos->y)
+            {
+                switch (mainFoodRef->getFoodPos(i).getSymbol())
+                {
+                    case '1':
+                        mainGameMechsRef->incrementScore();
+                        break;
+                    case '2':
+                        mainGameMechsRef->incrementScore();
+                        mainGameMechsRef->incrementScore();
+                        if(playerPosList->getSize() > 2)
+                        {
+                            playerPosList->removeTail();
+                            playerPosList->removeTail();
+                        }                    
+                        break;
+                }
+
+            }
+        }
         mainFoodRef->generateFood(playerPosList, *mainGameMechsRef);
-        mainGameMechsRef->incrementScore();
     }
     else playerPosList->removeTail();
 
@@ -128,6 +150,15 @@ void Player::movePlayer()
 // More methods to be added
 bool Player::checkFoodConsumption()
 {
-    return (mainFoodRef->getFoodPos().isPosEqual(&newPlayerPos));   // Returns whether the next head position is on food
+    //will get rid of hard code later
+    for(int i = 0; i < 5; i++)
+    {
+        if(mainFoodRef->getFoodPos(i).pos->x == newPlayerPos.pos->x && mainFoodRef->getFoodPos(i).pos->y == newPlayerPos.pos->y)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
