@@ -113,6 +113,16 @@ void Player::movePlayer()
     else playerPosList->removeTail();
 
     playerPosList->insertHead(newPlayerPos);
+
+    //Lose condition check <- iterate starting from second element
+    for (int i = 1; i < playerPosList->getSize(); i++)
+    {
+        if ((newPlayerPos.pos->x == playerPosList->getElement(i).pos->x) && (newPlayerPos.pos->y == playerPosList->getElement(i).pos->y))
+        {
+            mainGameMechsRef->setLoseFlag();
+            mainGameMechsRef->setExitTrue();
+        }
+    }
 }
 
 // More methods to be added
