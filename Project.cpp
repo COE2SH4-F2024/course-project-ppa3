@@ -145,8 +145,8 @@ void CleanUp(void)
     
 
     delete mechs;
-    MacUILib_printf("May i uninit? Yes");
     
-    MacUILib_uninit();      // Not firing, for some reason
+    
+    MacUILib_uninit();      
     
 }
