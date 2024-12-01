@@ -81,6 +81,14 @@ void objPosArrayList::removeTail()
     }
 }
 
+void objPosArrayList::removeTail(int count)
+{
+    if (listSize >= count)
+    {
+        listSize -= count;
+    }
+}
+
 objPos objPosArrayList::getHeadElement() const
 {
     if (listSize > 0)
@@ -111,5 +119,40 @@ objPos objPosArrayList::getElement(int index) const
 }   // We want no 'out of bounds' access but the test cases explicitly want to be able to access anything on the whole 200-member heap array
     // This implementation prevents seg fault but could cause semantic errors - BE CAREFUL
 
+bool objPosArrayList::checkFor(objPos myPos)
+{
+    int i;
+    for (i=0; i<listSize; i++)
+    {
+        if (getElement(i).isPosEqual(&myPos))   return true;
+    }
+    return false;   
+}
+
+bool objPosArrayList::checkFor(objPos myPos, int manualSize)
+{
+    
+    int i;
+    if (manualSize > listSize)  manualSize = listSize;  // no seg fault
+    
+    for (i=0; i<manualSize; i++)     
+    {
+        if (getElement(i).isPosEqual(&myPos))   return true;
+    }
+    return false;   
+}
+
+bool objPosArrayList::checkFor(objPos myPos, int manualSize, int iStart)
+{
+    
+    int i;
+    if (manualSize > listSize)  manualSize = listSize;  // no seg fault
+
+    for (i=iStart; i<manualSize; i++)     
+    {
+        if (getElement(i).isPosEqual(&myPos))   return true;
+    }
+    return false;   
+}
 // Paste your Tested implementation here.
 // Paste your Tested implementation here.

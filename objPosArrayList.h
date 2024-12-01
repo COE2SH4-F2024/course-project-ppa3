@@ -22,10 +22,15 @@ class objPosArrayList
         void insertTail(objPos thisPos);
         void removeHead();
         void removeTail();
+        void removeTail(int count); // another overload 
         
         objPos getHeadElement() const;
         objPos getTailElement() const;
         objPos getElement(int index) const;
+
+        bool checkFor(objPos myPos);   // implemented to modularize list indexing
+        bool checkFor(objPos myPos, int manualSize);   // overload of above
+        bool checkFor(objPos myPos, int manualSize, int iStart);   // overload of above
 };
 
 #endif

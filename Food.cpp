@@ -7,41 +7,25 @@
 
 Food::Food()
 {
-    // What to do here?
+
     foodBucket = new objPosArrayList();
 }
 
 Food::~Food()
 {
-    // What to do here?
+
     delete foodBucket;
 }
 
 void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
 {
-    /*
-    HEAR ME OUT
-    Manual does not instruct us to include GameMechs here BUT this is the above and beyond design...
-    The original design intended for generateFood to be able to access gameMechs, because boardX, boardY are necessary info
-    So it makes sense to include either gameMechs or 2 int parameters
-    If its illegal, the bonus marks will likely take some of the heat for us :)
-    Lets try to find out if this is allowed
-    */
 
-   /*
-   The implementation differs from the manual, but I decided to keep foodPos to use as a temporary objPos instance
-   when generating the new positions
-   */
 
-    foodPos.pos->x = -10;
-    foodPos.pos->y = -10;
+   
 
-    for(int i = 0; i < foodBucket->getSize() + 1; i++)
-    {
-        delete foodBucket;
+    delete foodBucket;
 
-        foodBucket = new objPosArrayList();
-    }
+    foodBucket = new objPosArrayList();
 
     srand(time(NULL));
     int boardX = mechs.getBoardSizeX();
@@ -49,8 +33,16 @@ void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
     int randX, randY, flag;
     char randS;
 
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 5; i++)      // Populate food bucket
     {
+        /*
+        The implementation differs from the manual, but I decided to keep foodPos to use as a temporary objPos instance
+        when generating the new positions
+        */
+
+        foodPos.pos->x = -10;
+        foodPos.pos->y = -10;
+        
         flag = 0;
         while (flag == 0)
         {
@@ -67,9 +59,9 @@ void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
             
             if (!(randX && randY)) continue;  // If either of these is 0 it's in the border, so we go again
 
-            if (randS == '*' || randS == ' ' || randS == '#') continue;
+            if (randS == '*' || randS == ' ' || randS == '#') continue;     // banned symbol list
 
-            foodPos.setObjPos(randX, randY, randS); // This will be changed if something's wrong
+            foodPos.setObjPos(randX, randY, randS); // This will not be inserted if something's wrong
 
             int k, snakeLength;
             snakeLength = blockOff->getSize();
@@ -84,13 +76,14 @@ void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
                     break;
                 }
             }
+
             if (flag == 1)
             {
-                for (int k = 0; k < i; k++)
+                for (k = 0; k < i; k++)
                 {
                     if (foodBucket->getElement(k).isPosEqual(&foodPos))
                     {
-                        flag = 1;
+                        flag = 0;
                     }
                 }
             }
@@ -111,4 +104,9 @@ objPos const Food::getFoodPos()
 objPos const Food::getFoodPos(int index)
 {
     return foodBucket->getElement(index).getObjPos();
+}
+
+objPosArrayList * const Food::getFoodBucket()
+{
+    return foodBucket;
 }
