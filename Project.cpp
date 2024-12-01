@@ -122,6 +122,7 @@ void DrawScreen(void)
         MacUILib_printf("\n"); // Vertical spacing
     }
     MacUILib_printf("Score: %d", mechs->getScore());
+    MacUILib_printf("\nLives: %d", player->getLives());
     //MacUILib_printf("Player X: %d", player->getPlayerPos().pos->x);     // debug
 }
 

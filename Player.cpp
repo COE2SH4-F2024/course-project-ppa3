@@ -6,14 +6,13 @@ Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
     mainGameMechsRef = thisGMRef;
     mainFoodRef = thisFoodRef;
     myDir = STOP;
+    invulnerability = 0;
 
     // more actions to be included
 
     playerPosList = new objPosArrayList;
 
     playerPosList->insertHead(mainGameMechsRef->getBoardSizeX()/2,mainGameMechsRef->getBoardSizeY()/2,'*'); // Overload of insertHead
-
-   
 }
 
 
@@ -126,6 +125,11 @@ void Player::movePlayer()
                             playerPosList->removeTail();
                         }                    
                         break;
+                    case '3':
+                        invulnerability ++;
+                        mainGameMechsRef->incrementScore();
+                        break;
+                        
                 }
 
             }
@@ -137,12 +141,20 @@ void Player::movePlayer()
     playerPosList->insertHead(newPlayerPos);
 
     //Lose condition check <- iterate starting from second element
+
     for (int i = 1; i < playerPosList->getSize(); i++)
     {
         if ((newPlayerPos.pos->x == playerPosList->getElement(i).pos->x) && (newPlayerPos.pos->y == playerPosList->getElement(i).pos->y))
         {
-            mainGameMechsRef->setLoseFlag();
-            mainGameMechsRef->setExitTrue();
+            if (!invulnerability)
+            {
+                mainGameMechsRef->setLoseFlag();
+                mainGameMechsRef->setExitTrue();
+            }
+            else
+            {
+                invulnerability --;
+            }
         }
     }
 }
@@ -160,5 +172,10 @@ bool Player::checkFoodConsumption()
     }
 
     return false;
+}
+
+int Player::getLives()
+{
+    return invulnerability + 1;
 }
 

@@ -62,7 +62,7 @@ void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
             }
             else
             {
-                randS = 50;
+                randS = 50 + rand()%(2);
             }
             
             if (!(randX && randY)) continue;  // If either of these is 0 it's in the border, so we go again

@@ -27,12 +27,15 @@ class Player
 
         // More methods to be added here
         bool checkFoodConsumption();
+
+        int getLives();
         
 
     private:
         objPosArrayList* playerPosList; // Upgrade this in iteration 3.
         objPos newPlayerPos;   
         enum Dir myDir;
+        int invulnerability;
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
