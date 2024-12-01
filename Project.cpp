@@ -6,7 +6,7 @@
 
 #include "GameMechs.h"
 #include "Player.h"
-//#include "Food.h"
+
 
 using namespace std;
 
@@ -81,7 +81,7 @@ void DrawScreen(void)
     int i,j,boardX,boardY;
     boardX=mechs->getBoardSizeX();
     boardY=mechs->getBoardSizeY();
-    bool foodFlag = false; //simplifies implementation
+    bool foodFlag = false; // simplifies implementation
 
     for (i=0; i<boardY; i++)
     {
@@ -139,7 +139,14 @@ void CleanUp(void)
     else {MacUILib_printf("Terminated successfully!");}
 
     delete player;
-    delete mechs;
+    
+    
     delete pFood;
-    MacUILib_uninit();
+    
+
+    delete mechs;
+    MacUILib_printf("May i uninit? Yes");
+    
+    MacUILib_uninit();      // Not firing, for some reason
+    
 }

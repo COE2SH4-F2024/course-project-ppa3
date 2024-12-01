@@ -19,7 +19,7 @@ Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
 Player::~Player()
 {
     // delete any heap members here
-    // idk that we have any lmfao
+    delete playerPosList;
 }
 
 objPosArrayList* Player::getPlayerPos() const
