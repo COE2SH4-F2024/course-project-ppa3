@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define FOOD_COUNT 5
-#define AVAILABLE_SPECIALS 5
 
 Food::Food()    // Contains hard code regarding food symbols
 {

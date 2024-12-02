@@ -1,6 +1,10 @@
 #include "objPos.h"
 #include "GameMechs.h"
 
+#define FOOD_COUNT 5
+#define AVAILABLE_SPECIALS 5
+
+
 class Food
 {
     private:
