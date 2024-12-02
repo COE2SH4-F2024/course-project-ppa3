@@ -1,7 +1,5 @@
 #include "GameMechs.h"
 
-#include <iostream>
-using namespace std;
 
 GameMechs::GameMechs()
 {
@@ -30,7 +28,6 @@ GameMechs::GameMechs(int boardX, int boardY)
     if (boardSizeX<1) boardSizeX=30; // for safety
     if (boardSizeY<1) boardSizeY=15;
 
-    cout << "wow";
     pGameBoard = new Board(boardSizeX, boardSizeY);      // initialize gameboard storage on the heap
 }
 
@@ -47,6 +44,20 @@ GameMechs::~GameMechs()
     improving the performance of the program significantly and enabling many bonus features,
     then a destructor may be beneficial
     */
+}
+
+GameMechs::GameMechs(const GameMechs &mechs)
+{
+    input = 0;
+    exitFlag = false;
+    loseFlag = false;
+    score = 0;
+    boardSizeX = mechs.getBoardSizeX();
+    boardSizeY = mechs.getBoardSizeY();
+    if (boardSizeX<1) boardSizeX=30; // for safety
+    if (boardSizeY<1) boardSizeY=15;
+
+    pGameBoard = mechs.getBoard();      // initialize gameboard storage on the heap
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -113,7 +124,7 @@ void GameMechs::clearInput()
 
 // More methods should be added here
 
-int GameMechs::getSpeedMultiplier()
+int GameMechs::getSpeedMultiplier() const
 {
     return speedMultiplier;
 }
@@ -123,7 +134,7 @@ void GameMechs::incrementSpeedMultiplier()
     speedMultiplier++;
 }
 
-Board* GameMechs::getBoard()
+Board* GameMechs::getBoard() const
 {
     return pGameBoard;
 }

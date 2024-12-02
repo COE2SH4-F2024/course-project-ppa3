@@ -28,6 +28,7 @@ class GameMechs
         GameMechs();
         GameMechs(int boardX, int boardY);
         ~GameMechs(); // is this one needed at all? Why or why not?
+        GameMechs(const GameMechs &mechs);
         
         bool getExitFlagStatus() const; 
         void setExitTrue();
@@ -46,9 +47,9 @@ class GameMechs
         void incrementScore(int inc);   // overload for bonus features 
         
         // More methods should be added here
-        int getSpeedMultiplier();
-        void incrementSpeedMultiplier();
-        Board* getBoard();
+        int getSpeedMultiplier() const; 
+        void incrementSpeedMultiplier(); 
+        Board* getBoard() const; 
 };
 
 #endif
