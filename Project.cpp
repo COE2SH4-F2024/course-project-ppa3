@@ -11,7 +11,6 @@
 using namespace std;
 
 #define DELAY_CONST 100000
-#define FOODS 5
 
 GameMechs *mechs; // Should be deleted one day
 Player *player; // Should also go away
@@ -28,7 +27,6 @@ void CleanUp(void);
 
 int main(void)
 {
-
     Initialize();
 
     while(mechs->getExitFlagStatus() == false)  
@@ -47,7 +45,8 @@ int main(void)
 void Initialize(void)
 {
     MacUILib_init();
-    MacUILib_clearScreen();
+    MacUILib_clearScreen();   
+    
 
     mechs = new GameMechs();
     pFood = new Food();
@@ -72,15 +71,21 @@ void RunLogic(void)
         player->updatePlayerDir();
     }
     player->movePlayer();
+
+    player->decrementStatusEffects(DELAY_CONST);    // if any status effects, decrease them by the appropriate # of microseconds
 }
 
 void DrawScreen(void)
 {
-    MacUILib_clearScreen();  
+    MacUILib_clearScreen();
     
     int i,j,boardX,boardY;
     boardX=mechs->getBoardSizeX();
     boardY=mechs->getBoardSizeY();
+    
+    /*
+    // Original implementation, without Board class:
+
     bool foodFlag = false; // simplifies implementation
 
     for (i=0; i<boardY; i++)
@@ -121,14 +126,68 @@ void DrawScreen(void)
         }
         MacUILib_printf("\n"); // Vertical spacing
     }
+
+    // original implementation ends here
+
+    */
+    
+    
+    // new modularization starts here
+
+    
+
+    // clear board and write snake + food to it
+    mechs->getBoard()->wipeInterior();
+    mechs->getBoard()->writeToBoard(*pFood->getFoodBucket());
+
+    if (player->getBlindTime() == 0)
+    {
+        mechs->getBoard()->drawBorder();    // Ensures the border is at its regular state, which by default is '#'
+        mechs->getBoard()->writeToBoard(*player->getPlayerPos());
+    }
+
+    else    // if we are blind we will only see the head element
+    {
+        mechs->getBoard()->writeToBoard(player->getPlayerPos()->getHeadElement());
+        mechs->getBoard()->drawBorder(' ');  // the border is invisible
+    }
+
+    // Now we print the entire board from the canvas
+    for (i=0; i<boardY; i++)
+    {
+        for (j=0; j<boardX; j++)
+        {
+            MacUILib_printf("%c", mechs->getBoard()->getData(j,i));  // the character in question
+        }
+        MacUILib_printf("\n");
+    }
+    // New modularization ends here... the following logic belongs to both pathways
+
     MacUILib_printf("Score: %d", mechs->getScore());
     MacUILib_printf("\nLives: %d", player->getLives());
+    
+    // Report on how much longer you are dizzy, if necessary
+    // converted from microseconds to seconds, also rounded up
+    if (player->getDizzyTime() != 0) 
+    {
+        MacUILib_printf("\nDizzy for %d seconds!", 1+player->getDizzyTime()/1000000);      
+    }
+
+    // Report on how much longer you are blind, if necessary
+    // converted from microseconds to seconds, also rounded up
+    if (player->getBlindTime() != 0)
+    {
+        MacUILib_printf("\nBlind for %d seconds!", 1+player->getBlindTime()/1000000);
+    }
+
+
     //MacUILib_printf("Player X: %d", player->getPlayerPos().pos->x);     // debug
 }
 
 void LoopDelay(void)
 {
-    MacUILib_Delay(DELAY_CONST); // 0.1s delay
+    MacUILib_Delay(DELAY_CONST/mechs->getSpeedMultiplier()); // 0.1s delay, will change if you eat '^'
+    // The reason we use / with a "multiplier" is that decreasing (dividing) the delay will increase (multiply) the speed
 }
 
 

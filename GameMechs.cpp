@@ -1,13 +1,22 @@
 #include "GameMechs.h"
 
+#include <iostream>
+using namespace std;
+
 GameMechs::GameMechs()
 {
     input = 0;
     exitFlag = false;
     loseFlag = false;
     score = 0;
+    speedMultiplier = 1;
+
     boardSizeX = 30;
     boardSizeY = 15;
+
+    
+    pGameBoard = new Board(boardSizeX, boardSizeY);      // initialize gameboard storage on the heap
+    
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -20,12 +29,24 @@ GameMechs::GameMechs(int boardX, int boardY)
     boardSizeY = boardY;
     if (boardSizeX<1) boardSizeX=30; // for safety
     if (boardSizeY<1) boardSizeY=15;
+
+    cout << "wow";
+    pGameBoard = new Board(boardSizeX, boardSizeY);      // initialize gameboard storage on the heap
 }
 
 // do you need a destructor?
 GameMechs::~GameMechs()
 {
-    // i dont think so haha
+    delete pGameBoard;       // debug
+
+    // the short answer is no we do not need a destructor
+
+    /* 
+    the long answer is, if we want to store the board on the heap, 
+    and write to it rather than printing it all in one shot,
+    improving the performance of the program significantly and enabling many bonus features,
+    then a destructor may be beneficial
+    */
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -91,3 +112,18 @@ void GameMechs::clearInput()
 }
 
 // More methods should be added here
+
+int GameMechs::getSpeedMultiplier()
+{
+    return speedMultiplier;
+}
+
+void GameMechs::incrementSpeedMultiplier()
+{
+    speedMultiplier++;
+}
+
+Board* GameMechs::getBoard()
+{
+    return pGameBoard;
+}

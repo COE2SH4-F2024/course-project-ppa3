@@ -1,19 +1,17 @@
 #include "Food.h"
-#include "objPos.h"
-#include "GameMechs.h" 
 #include <stdlib.h>
 #include <time.h>
 
-#include <iostream>
-using namespace std;
-
+#define FOOD_COUNT 5
+#define AVAILABLE_SPECIALS 5
 
 Food::Food()    // Contains hard code regarding food symbols
 {
 
     foodBucket = new objPosArrayList();
+    targetBucketSize = FOOD_COUNT;
 
-    specialMenuLength = 5;
+    specialMenuLength = AVAILABLE_SPECIALS;
 
     specials = new char[specialMenuLength];
     specials[0] = '+';  // Hard code, necessary
@@ -29,15 +27,9 @@ Food::~Food()
     delete foodBucket;
 }
 
-void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
+void Food::generateFood(objPosArrayList* blockOff, GameMechs &mechs)
 {
-
-
-   
-
-    delete foodBucket;
-
-    foodBucket = new objPosArrayList();
+    foodBucket->removeAll();    // reset FoodBucket to 0 members
 
     srand(time(NULL));
     int boardX = mechs.getBoardSizeX();
@@ -45,7 +37,7 @@ void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
     int randX, randY, flag, specialCount;
     char randS;
 
-    for(int i = 0; i < 5; i++)      // Populate food bucket
+    for(int i = 0; i < targetBucketSize; i++)      // Populate food bucket
     {
         /*
         The implementation differs from the manual, but I decided to keep foodPos to use as a temporary objPos instance
@@ -100,8 +92,6 @@ void Food::generateFood(objPosArrayList* blockOff, GameMechs mechs)
                 if (foodBucket->getElement(k).getSymbol() == randS)     // Ensure no duplicate symbols
                 {    
                     flag = 0;
-                    cout << randS;
-                    cout << "\n";
                     break;
                 }
             }

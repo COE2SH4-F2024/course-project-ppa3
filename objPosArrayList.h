@@ -16,6 +16,9 @@ class objPosArrayList
         objPosArrayList();
         ~objPosArrayList();
 
+        objPosArrayList(const objPosArrayList &opal);   // implemented min 4 for fun/ expandability
+        objPosArrayList& operator=(const objPosArrayList &opal);
+
         int getSize() const;
         bool atCapacity() const;    // added by me
         void insertHead(objPos thisPos);
@@ -23,7 +26,8 @@ class objPosArrayList
         void insertTail(objPos thisPos);
         void removeHead();
         void removeTail();
-        void removeTail(int count); // another overload 
+        void removeTail(int count); // another overload
+        void removeAll();   // lazy reset to 0 
         
         objPos getHeadElement() const;
         objPos getTailElement() const;

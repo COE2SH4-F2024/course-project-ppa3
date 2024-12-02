@@ -6,7 +6,11 @@ Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
     mainGameMechsRef = thisGMRef;
     mainFoodRef = thisFoodRef;
     myDir = STOP;
+
+    // Special effects
     invulnerability = 0;
+    dizzyTime = 0;
+    blindTime = 0;
 
     // more actions to be included
 
@@ -36,35 +40,71 @@ void Player::updatePlayerDir()
 
     if(mainGameMechsRef->getInput() != 0)  // if not null character
     {
-        switch(mainGameMechsRef->getInput())
-        {                      
-            case shutdownKey:  // 27 is ESC
-                mainGameMechsRef->setExitTrue(); // exit
-                break;
-            case upKey:
-                if (myDir!=DOWN) {myDir=UP;}
-                break;
-            case leftKey:
-                if (myDir!=RIGHT) {myDir=LEFT;}
-                break;
-            case downKey:
-                if (myDir!=UP) {myDir=DOWN;}
-                break;
-            case rightKey:
-                if (myDir!=LEFT) {myDir=RIGHT;}
-                break;
-            case scoreKey:
-                mainGameMechsRef->incrementScore();
-                break;
-            case loseKey:
-                mainGameMechsRef->setLoseFlag();
-                mainGameMechsRef->setExitTrue();
-                break;
-            case foodKey:
-                mainFoodRef->generateFood(playerPosList, *mainGameMechsRef);
-                break;
-            default:
-                break;
+        if (dizzyTime == 0)     // if controls are not inverted
+        {
+            switch(mainGameMechsRef->getInput())
+            {                      
+                case shutdownKey:  // 27 is ESC
+                    mainGameMechsRef->setExitTrue(); // exit
+                    break;
+                case upKey:
+                    if (myDir!=DOWN) {myDir=UP;}
+                    break;
+                case leftKey:
+                    if (myDir!=RIGHT) {myDir=LEFT;}
+                    break;
+                case downKey:
+                    if (myDir!=UP) {myDir=DOWN;}
+                    break;
+                case rightKey:
+                    if (myDir!=LEFT) {myDir=RIGHT;}
+                    break;
+                case scoreKey:
+                    mainGameMechsRef->incrementScore();
+                    break;
+                case loseKey:
+                    mainGameMechsRef->setLoseFlag();
+                    mainGameMechsRef->setExitTrue();
+                    break;
+                case foodKey:
+                    mainFoodRef->generateFood(playerPosList, *mainGameMechsRef);
+                    break;
+                default:
+                    break;
+            }
+        }
+        else    // THIS IS NOT THE MAIN CASE. WE HAVE FLIPPED THE direction CONTROLS FOR GAMEPLAY PURPOSES
+        {
+            switch(mainGameMechsRef->getInput())
+            {                      
+                case shutdownKey:  // 27 is ESC
+                    mainGameMechsRef->setExitTrue(); // exit
+                    break;
+                case downKey:   // downKey sends you up
+                    if (myDir!=DOWN) {myDir=UP;}
+                    break;
+                case rightKey:  // rightKey sends you left
+                    if (myDir!=RIGHT) {myDir=LEFT;}
+                    break;
+                case upKey: // flipped
+                    if (myDir!=UP) {myDir=DOWN;}
+                    break;
+                case leftKey:   // flipped
+                    if (myDir!=LEFT) {myDir=RIGHT;}
+                    break;
+                case scoreKey:
+                    mainGameMechsRef->incrementScore();
+                    break;
+                case loseKey:
+                    mainGameMechsRef->setLoseFlag();
+                    mainGameMechsRef->setExitTrue();
+                    break;
+                case foodKey:
+                    mainFoodRef->generateFood(playerPosList, *mainGameMechsRef);
+                    break;
+                default:
+                    break;
+            }
         }
         mainGameMechsRef->clearInput();
     }
@@ -114,7 +154,7 @@ void Player::movePlayer()
     {
         switch (eatenSymbol)
         {
-            case '+':
+            case '+':   // Extra life!
                 invulnerability ++;
                 mainGameMechsRef->incrementScore();
                 break;
@@ -127,6 +167,24 @@ void Player::movePlayer()
                 }                    
                 break;
             
+            case '!':   // Blindness: only snake head and foods are visible for 3 seconds.
+                mainGameMechsRef->incrementScore();
+                blindTime = 1000000 * 3;    // 3 sec.
+                break;
+
+            case '?':   // Dizziness: flip direction controls for 5 seconds. up is down, down is up, etc.
+                mainGameMechsRef->incrementScore();
+                dizzyTime = 1000000 * 5;    // 5 sec.
+                break;
+
+            case '^':   // raises game speed irreversibly. May result in the game being unplayable but thats just part of the fun
+                mainGameMechsRef->incrementScore();
+                mainGameMechsRef->incrementSpeedMultiplier();
+                break;
+
+            
+            
+
             default:
                 mainGameMechsRef->incrementScore();
                 break;
@@ -225,4 +283,23 @@ char Player::checkFoodConsumption()
 int Player::getLives()
 {
     return invulnerability + 1;
+}
+
+int Player::getDizzyTime()
+{
+    return dizzyTime;
+}
+
+int Player::getBlindTime()
+{
+    return blindTime;
+}
+
+void Player::decrementStatusEffects(int decrementAmount)
+{
+    if (dizzyTime >= decrementAmount) dizzyTime -= decrementAmount;     // decrease the remaining time you are dizzy
+    else dizzyTime = 0;
+
+    if (blindTime >= decrementAmount) blindTime -= decrementAmount;     // decrease the remaining time you are blind
+    else blindTime = 0;
 }

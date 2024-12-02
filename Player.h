@@ -28,14 +28,23 @@ class Player
         // More methods to be added here
         char checkFoodConsumption();
 
+        // Getters for status effects
         int getLives();
+        int getDizzyTime();
+        int getBlindTime();
+
+        void decrementStatusEffects(int decrementAmount);   // decrease the remaining time of all active status effects
         
 
     private:
         objPosArrayList* playerPosList; // Upgrade this in iteration 3.
         objPos newPlayerPos;   
         enum Dir myDir;
+
+        // Custom Status Effects
         int invulnerability;
+        int dizzyTime;
+        int blindTime;
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;

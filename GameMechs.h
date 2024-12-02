@@ -4,8 +4,9 @@
 #include <cstdlib>
 #include <time.h>
 
-#include "objPos.h"
-#include "objPosArrayList.h"
+// #include "objPos.h"
+// #include "objPosArrayList.h"
+#include "Board.h"
 
 using namespace std;
 
@@ -16,9 +17,12 @@ class GameMechs
         bool exitFlag;
         bool loseFlag;
         int score;
+        int speedMultiplier;
 
         int boardSizeX;
         int boardSizeY;
+
+        Board* pGameBoard;    // new addition, stores the board to be printed
 
     public:
         GameMechs();
@@ -42,6 +46,9 @@ class GameMechs
         void incrementScore(int inc);   // overload for bonus features 
         
         // More methods should be added here
+        int getSpeedMultiplier();
+        void incrementSpeedMultiplier();
+        Board* getBoard();
 };
 
 #endif

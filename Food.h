@@ -1,11 +1,12 @@
 #include "objPos.h"
-#include "GameMechs.h"  // Make sure this is ok
+#include "GameMechs.h"
 
 class Food
 {
     private:
         objPos foodPos;
         objPosArrayList* foodBucket;
+        int targetBucketSize;
 
         char* specials;
         int specialMenuLength;
@@ -14,7 +15,7 @@ class Food
         Food(); // Default Constructor
         ~Food();    // Destroyer
 
-        void generateFood(objPosArrayList* blockOff, GameMechs mechs);
+        void generateFood(objPosArrayList* blockOff, GameMechs &mechs);
 
         objPos const getFoodPos();
         objPos const getFoodPos(int index);

@@ -7,15 +7,43 @@
 
 objPosArrayList::objPosArrayList()
 {
-    aList = new objPos[ARRAY_MAX_CAP];  // check if aList (the pointer) also needs to be on the heap, or just the array?
+    aList = new objPos[ARRAY_MAX_CAP];  
     arrayCapacity = ARRAY_MAX_CAP;
-    listSize = 0; 
-    int i;
+    listSize = 0;
 }
 
 objPosArrayList::~objPosArrayList()
 {
     delete[] aList;
+}
+
+objPosArrayList::objPosArrayList(const objPosArrayList &opal)
+{
+    aList = new objPos[ARRAY_MAX_CAP];  
+    arrayCapacity = ARRAY_MAX_CAP;
+    listSize = 0; 
+    int i;
+
+    for (i=0; i<opal.getSize(); i++)
+    {
+        insertTail(opal.getElement(i));
+    }
+}
+
+objPosArrayList& objPosArrayList::operator=(const objPosArrayList &opal)
+{
+    if (this != nullptr && this != &opal)
+    {
+        this->aList = new objPos[ARRAY_MAX_CAP];
+        this->arrayCapacity = ARRAY_MAX_CAP;
+        this->listSize = 0;
+        int i;
+
+        for (i=0; i<opal.getSize(); i++)
+        {
+            this->insertTail(opal.getElement(i));
+        }  
+    }
 }
 
 int objPosArrayList::getSize() const
@@ -93,6 +121,11 @@ void objPosArrayList::removeTail(int count)
     {
         listSize -= count;
     }
+}
+
+void objPosArrayList::removeAll()
+{
+    listSize = 0;
 }
 
 objPos objPosArrayList::getHeadElement() const
