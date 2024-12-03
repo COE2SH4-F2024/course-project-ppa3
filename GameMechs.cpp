@@ -41,12 +41,12 @@ GameMechs::~GameMechs()
     /* 
     the long answer is, if we want to store the board on the heap, 
     and write to it rather than printing it all in one shot,
-    improving the performance of the program significantly and enabling many bonus features,
+    improving the performance of the program, readability of draw routine, and enabling many bonus features,
     then a destructor may be beneficial
     */
 }
 
-GameMechs::GameMechs(const GameMechs &mechs)
+GameMechs::GameMechs(const GameMechs &mechs)    // copy constructor
 {
     input = 0;
     exitFlag = false;
@@ -59,6 +59,8 @@ GameMechs::GameMechs(const GameMechs &mechs)
 
     pGameBoard = mechs.getBoard();      // initialize gameboard storage on the heap
 }
+
+// names are mostly self explanatory
 
 bool GameMechs::getExitFlagStatus() const
 {
@@ -124,7 +126,7 @@ void GameMechs::clearInput()
 
 // More methods should be added here
 
-int GameMechs::getSpeedMultiplier() const
+int GameMechs::getSpeedMultiplier() const   // this value controls the speed
 {
     return speedMultiplier;
 }
@@ -134,7 +136,7 @@ void GameMechs::incrementSpeedMultiplier()
     speedMultiplier++;
 }
 
-Board* GameMechs::getBoard() const
+Board* GameMechs::getBoard() const  // returns Board object by reference
 {
     return pGameBoard;
 }

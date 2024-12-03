@@ -74,7 +74,7 @@ void RunLogic(void)
     player->decrementStatusEffects(DELAY_CONST);    // if any status effects, decrease them by the appropriate # of microseconds
 }
 
-void DrawScreen(void)
+void DrawScreen(void)       // if you dont understand this i recommend reading Board.cpp and objPosArrayList.cpp for more
 {
     MacUILib_clearScreen();
     
