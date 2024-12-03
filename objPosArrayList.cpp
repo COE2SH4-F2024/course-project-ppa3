@@ -51,6 +51,11 @@ int objPosArrayList::getSize() const
     return listSize;
 }
 
+int objPosArrayList::getCapacity() const
+{
+    return arrayCapacity;
+}
+
 bool objPosArrayList::atCapacity() const    // Manually added to check if the snake (or any other list) is full
 {
     if (listSize == arrayCapacity) return true;
@@ -61,11 +66,18 @@ void objPosArrayList::insertHead(objPos thisPos)
 {
     if (listSize<arrayCapacity)
     {
-        listSize++;
+
+        /*
+        1. increase list length. we will have i=listSize-1 i.e. index of the end of the list
+        2. start from the end of the list and overwrite each element with the element preceding it
+        3. after this, aList[0] is not overwritten: leave the loop and insert thisPos at head
+        */
+
         int i;
-        for (i=listSize;i>=0;i--)
+        for (i=listSize++; i>0; i--)
         {
-            aList[i+1].setObjPos(aList[i]);
+            
+            aList[i].setObjPos(aList[i-1]);
         }
         aList[0].setObjPos(thisPos);
     }

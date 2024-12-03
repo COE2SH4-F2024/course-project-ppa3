@@ -8,7 +8,6 @@
 // #include "objPosArrayList.h"
 #include "Board.h"
 
-using namespace std;
 
 class GameMechs
 {

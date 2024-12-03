@@ -1,5 +1,8 @@
 #include "Player.h"
 
+#include <iostream>
+using namespace std;
+
 
 Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
 {
@@ -119,6 +122,7 @@ void Player::movePlayer()
     int xWrap = mainGameMechsRef->getBoardSizeX()-2;    // These exist to minimize extra calls
     int yWrap = mainGameMechsRef->getBoardSizeY()-2;
 
+    
     newPlayerPos = playerPosList->getHeadElement();
 
     switch(myDir)
@@ -144,9 +148,12 @@ void Player::movePlayer()
             break;
     }
 
-    
+
+
 
     playerPosList->insertHead(newPlayerPos);
+
+
 
     char eatenSymbol = checkFoodConsumption();  // null if nothing eaten, else it's the character we just ate
     
@@ -154,7 +161,7 @@ void Player::movePlayer()
     {
         switch (eatenSymbol)
         {
-            case '+':   // Extra life!
+            case '+':   // Extra life! A life is lost each frame when the head is in the body.
                 invulnerability ++;
                 mainGameMechsRef->incrementScore();
                 break;
@@ -177,13 +184,17 @@ void Player::movePlayer()
                 dizzyTime = 1000000 * 5;    // 5 sec.
                 break;
 
-            case '^':   // raises game speed irreversibly. May result in the game being unplayable but thats just part of the fun
+            case '^':   // raises game speed irreversibly. May eventually outpace human reaction time but thats just part of the fun
                 mainGameMechsRef->incrementScore();
                 mainGameMechsRef->incrementSpeedMultiplier();
                 break;
 
-            
-            
+                /*
+                A note if you're worried:
+                - yes, eventually the time delay would reach 0 if you ate enough of these
+                - however you'd have to eat like 100k of them
+                - by the time you ate 200 the game would end in victory
+                */
 
             default:
                 mainGameMechsRef->incrementScore();

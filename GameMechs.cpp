@@ -9,8 +9,8 @@ GameMechs::GameMechs()
     score = 0;
     speedMultiplier = 1;
 
-    boardSizeX = 30;
-    boardSizeY = 15;
+    boardSizeX = 30;     // 30 default
+    boardSizeY = 15;     // 15 default
 
     
     pGameBoard = new Board(boardSizeX, boardSizeY);      // initialize gameboard storage on the heap

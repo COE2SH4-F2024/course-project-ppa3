@@ -20,6 +20,7 @@ class objPosArrayList
         objPosArrayList& operator=(const objPosArrayList &opal);
 
         int getSize() const;
+        int getCapacity() const;    // added by me
         bool atCapacity() const;    // added by me
         void insertHead(objPos thisPos);
         void insertHead(int x, int y, char s);  // overload by me

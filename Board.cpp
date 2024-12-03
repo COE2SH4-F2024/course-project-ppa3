@@ -1,7 +1,5 @@
 #include "Board.h"
 
-#include <iostream>
-using namespace std;
 
 /*
 Purpose of this class is to receive and store the data printed on the screen, such that
@@ -45,7 +43,6 @@ Board::~Board()
 Board::Board(const Board &B)
 {
     boardX = B.getBoardX();
-    cout << boardX;
     boardY = B.getBoardY();
     
     // Familiar 2D DMA array routine, but deep copying all elements of B
