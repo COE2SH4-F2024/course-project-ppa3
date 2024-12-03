@@ -85,9 +85,9 @@ Board& Board::operator=(const Board &B)
 Board::Board(int x, int y)
 {
     // board must be at least 4x4 with borders
-    if (boardX >= 4)    boardX = x;
+    if (x >= 4)    boardX = x;
     else boardX = 30;
-    if (boardY >= 4)    boardY = y;
+    if (y >= 4)    boardY = y;
     else boardY = 15;
 
 
