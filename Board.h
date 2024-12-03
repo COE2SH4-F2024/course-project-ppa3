@@ -21,7 +21,7 @@ class Board {
         char getData(int x, int y) const;
 
         // Large scale operations
-        void wipeInterior();    // default ' '
+        void clearInterior();    // default ' '
         void drawBorder();      // default '#'
         void drawBorder(char symbol);
 

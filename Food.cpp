@@ -3,13 +3,13 @@
 #include <time.h>
 
 
-Food::Food()    // Contains hard code regarding food symbols
+Food::Food()    // Copy Constructor // Contains hard code regarding food symbols
 {
 
     foodBucket = new objPosArrayList();
-    targetBucketSize = FOOD_COUNT;
+    targetBucketSize = FOOD_COUNT;  // how many foods in the bucket / on the board
 
-    specialMenuLength = AVAILABLE_SPECIALS;
+    specialMenuLength = AVAILABLE_SPECIALS; // how many specials are there? In our case '+' '-' '!' '?' '^' -> 5 specials
 
     specials = new char[specialMenuLength];
     specials[0] = '+';  // Hard code, necessary
@@ -19,7 +19,7 @@ Food::Food()    // Contains hard code regarding food symbols
     specials[4] = '^';
 }
 
-Food::~Food()
+Food::~Food()   // Destructor
 {
     delete [] specials;
     delete foodBucket;

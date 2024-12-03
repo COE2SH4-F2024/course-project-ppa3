@@ -5,19 +5,19 @@
 // Check lecture contents on general purpose array list construction, 
 // and modify it to support objPos array list construction.
 
-objPosArrayList::objPosArrayList()
+objPosArrayList::objPosArrayList()  // Constructor (required)
 {
     aList = new objPos[ARRAY_MAX_CAP];  
     arrayCapacity = ARRAY_MAX_CAP;
     listSize = 0;
 }
 
-objPosArrayList::~objPosArrayList()
+objPosArrayList::~objPosArrayList() // Destructor (required)
 {
     delete[] aList;
 }
 
-objPosArrayList::objPosArrayList(const objPosArrayList &opal)
+objPosArrayList::objPosArrayList(const objPosArrayList &opal)   // Copy constructor
 {
     aList = new objPos[ARRAY_MAX_CAP];  
     arrayCapacity = ARRAY_MAX_CAP;
@@ -30,7 +30,7 @@ objPosArrayList::objPosArrayList(const objPosArrayList &opal)
     }
 }
 
-objPosArrayList& objPosArrayList::operator=(const objPosArrayList &opal)
+objPosArrayList& objPosArrayList::operator=(const objPosArrayList &opal)    // = overload
 {
     if (this != nullptr && this != &opal)
     {
@@ -44,6 +44,7 @@ objPosArrayList& objPosArrayList::operator=(const objPosArrayList &opal)
             this->insertTail(opal.getElement(i));
         }  
     }
+    return *this;
 }
 
 int objPosArrayList::getSize() const
@@ -76,7 +77,6 @@ void objPosArrayList::insertHead(objPos thisPos)
         int i;
         for (i=listSize++; i>0; i--)
         {
-            
             aList[i].setObjPos(aList[i-1]);
         }
         aList[0].setObjPos(thisPos);
@@ -87,11 +87,10 @@ void objPosArrayList::insertHead(int x, int y, char s)
 {
     if (listSize<arrayCapacity)
     {
-        listSize++;
         int i;
-        for (i=listSize;i>=0;i--)
+        for (i=listSize++; i>0; i--)
         {
-            aList[i+1].setObjPos(aList[i]);
+            aList[i].setObjPos(aList[i-1]);
         }
         aList[0].setObjPos(x,y,s);
     }
@@ -170,7 +169,10 @@ objPos objPosArrayList::getElement(int index) const
 }   // We want no 'out of bounds' access but the test cases explicitly want to be able to access anything on the whole 200-member heap array
     // This implementation prevents seg fault but could cause semantic errors - BE CAREFUL
 
-bool objPosArrayList::checkFor(objPos myPos)
+
+
+
+bool objPosArrayList::checkFor(objPos myPos)    // Iterates through list to determine if it contains myPos, returning a bool
 {
     int i;
     for (i=0; i<listSize; i++)
@@ -180,11 +182,14 @@ bool objPosArrayList::checkFor(objPos myPos)
     return false;   
 }
 
-bool objPosArrayList::checkFor(objPos myPos, int manualSize)
+
+
+
+bool objPosArrayList::checkFor(objPos myPos, int manualSize)    // Same as above, but can control how deep into the list it goes
 {
     
     int i;
-    if (manualSize > listSize)  manualSize = listSize;  // no seg fault
+    if (manualSize < 0 || manualSize > listSize)  manualSize = listSize;  // no seg fault
     
     for (i=0; i<manualSize; i++)     
     {
@@ -193,7 +198,7 @@ bool objPosArrayList::checkFor(objPos myPos, int manualSize)
     return false;   
 }
 
-bool objPosArrayList::checkFor(objPos myPos, int manualSize, int iStart)
+bool objPosArrayList::checkFor(objPos myPos, int manualSize, int iStart)    // above, but can also control where in list to start
 {
     
     int i;
@@ -206,7 +211,7 @@ bool objPosArrayList::checkFor(objPos myPos, int manualSize, int iStart)
     return false;   
 }
 
-char objPosArrayList::getSymbolIfHas(objPos myPos)
+char objPosArrayList::getSymbolIfHas(objPos myPos)  // Same as checkFor(objPos) above, but returns symbol in the event of a collision
 {
     int i;
     char mySymbol;
@@ -223,5 +228,3 @@ char objPosArrayList::getSymbolIfHas(objPos myPos)
     }
     return 0;
 }
-// Paste your Tested implementation here.
-// Paste your Tested implementation here.

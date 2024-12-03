@@ -28,6 +28,12 @@ Board::Board()
     {
         boardData[i] = new char[boardY];
     }
+
+    // Iterates through the whole board and sets all cells = ' '
+    // Then sets the border '#'
+    // Obviously I could have done this when I looped before but then it wouldnt have been as readable
+    clearInterior();
+    drawBorder();
 }
 
 Board::~Board()
@@ -93,10 +99,11 @@ Board::Board(int x, int y)
     {
         boardData[i] = new char[boardY];
     }
+
     // Iterates through the whole board and sets all cells = ' '
     // Then sets the border '#'
-    // Obviously I could have done this when I looped before but then it wouldnt have been as readable
-    wipeInterior();
+    // Obviously could have done this in loop before but then it wouldnt have been as readable
+    clearInterior();
     drawBorder();
 }
 
@@ -116,7 +123,7 @@ char Board::getData(int x, int y) const
 }
 
 // Clears all of the array except the border
-void Board::wipeInterior()
+void Board::clearInterior()
 {
     int i,j;
     for (i=1; i<boardX-1; i++)
@@ -128,13 +135,13 @@ void Board::wipeInterior()
     }
 }
 
-void Board::drawBorder()
+void Board::drawBorder()    // reset border to borderChar
 {
     char borderChar = DEFAULT_BORDER_CHAR;
     
     int i;
 
-    // turn every border cell into borderChar
+    // iterate through all border cells and make the change
     for(i=0; i<boardX; i++)
     {
         boardData[i][0] = borderChar;
@@ -154,7 +161,7 @@ void Board::drawBorder(char symbol)     // generic drawBorder, for expandability
     
     int i;
 
-    // turn every border cell into borderChar
+    // go through every border character
     for(i=0; i<boardX; i++)
     {
         boardData[i][0] = borderChar;
@@ -168,15 +175,20 @@ void Board::drawBorder(char symbol)     // generic drawBorder, for expandability
     }
 }
 
-void Board::writeToBoard(objPos o)
+void Board::writeToBoard(objPos o)  // Makes a change to the board using the coordinates and symbol of an objPos
 {
     boardData[o.pos->x][o.pos->y] = o.symbol;
 }
 
-void Board::writeToBoard(objPosArrayList opal)
+
+void Board::writeToBoard(objPosArrayList opal)  // The above, repeated through a list
 {
     int i, listLength;
     listLength = opal.getSize();
     
-    for (i=0; i<listLength; i++)    writeToBoard(opal.getElement(i));   // Writes the list, element by element, to the board
+    for (i=0; i<listLength; i++)    
+    {
+        writeToBoard(opal.getElement(i));   // Writes the list, element by element, to the board
+    }
 }
+// Purpose of this is to store the list before printing, instead of indexing through the list for every cell

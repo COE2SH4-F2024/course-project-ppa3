@@ -9,9 +9,10 @@
 
 #define DELAY_CONST 100000     // default 100000
 
-GameMechs *mechs; // Should be deleted one day
-Player *player; // Should also go away
-Food *pFood; // We don't like globals >:(
+// We need some pointers in global scope... no way around this, as the routines return nothing
+GameMechs *mechs; 
+Player *player;
+Food *pFood;
 
 void Initialize(void);
 void GetInput(void);
@@ -49,7 +50,7 @@ void Initialize(void)
     pFood = new Food();
     player = new Player(mechs, pFood);
     
-
+    // Populate the board with food. Will refresh when you eat something
     pFood->generateFood(player->getPlayerPos(), *mechs);
 }
 
@@ -81,66 +82,19 @@ void DrawScreen(void)
     boardX=mechs->getBoardSizeX();
     boardY=mechs->getBoardSizeY();
     
-    /*
-    // Original implementation, without Board class:
-
-    bool foodFlag = false; // simplifies implementation
-
-    for (i=0; i<boardY; i++)
-    {
-        for (j=0; j<boardX; j++)
-        {
-            if (j==0||i==0||j+1==boardX||i+1==boardY)
-            {
-                MacUILib_printf("%c", '#');
-            }
-            else
-            {
-                int k, snakeLength;
-                snakeLength = player->getPlayerPos()->getSize();
-
-                foodFlag = false;
-
-                for (int k = 0; k< FOODS; k++)
-                {
-                    if(pFood->getFoodPos(k).pos->x == j && pFood->getFoodPos(k).pos->y == i)
-                    {
-                        MacUILib_printf("%c", pFood->getFoodPos(k).symbol);
-                        foodFlag = true;
-                        break;
-                    }
-                }
-
-                for(k=0; k<snakeLength; k++)
-                {
-                    if (player->getPlayerPos()->getElement(k).pos->x==j && player->getPlayerPos()->getElement(k).pos->y==i)
-                    {
-                        MacUILib_printf("%c", player->getPlayerPos()->getElement(k).symbol);
-                        break;
-                    }
-                }
-                if (k==snakeLength && !foodFlag) MacUILib_printf("%c", ' ');
-            }
-        }
-        MacUILib_printf("\n"); // Vertical spacing
-    }
-
-    // original implementation ends here
-
-    */
     
-    
-    // new modularization starts here
+    // Summary of why we use Board class: more time-efficient for long snakes, and makes draw routine clearer
+    // Acts more or less as a canvas that we draw on, then print from
+    // For more detailed justification read Board.cpp
 
-    
-
-    // clear board and write snake + food to it
-    mechs->getBoard()->wipeInterior();
+    // clear board and write food to it
+    mechs->getBoard()->clearInterior();
     mechs->getBoard()->writeToBoard(*pFood->getFoodBucket());
 
+    // write player positions (whole snake) to the board. Only write head if we are blind from eating '!'
     if (player->getBlindTime() == 0)
     {
-        mechs->getBoard()->drawBorder();    // Ensures the border is at its regular state, which by default is '#'
+        mechs->getBoard()->drawBorder();    // set border to defauls
         mechs->getBoard()->writeToBoard(*player->getPlayerPos());
     }
 
@@ -150,19 +104,20 @@ void DrawScreen(void)
         mechs->getBoard()->drawBorder(' ');  // the border is invisible
     }
 
-    // Now we print the entire board from the canvas
+    // iterate through and print the entire board
     for (i=0; i<boardY; i++)
     {
         for (j=0; j<boardX; j++)
         {
-            MacUILib_printf("%c", mechs->getBoard()->getData(j,i));  // the character in question
+            MacUILib_printf("%c", mechs->getBoard()->getData(j,i));  // the character to print
         }
-        MacUILib_printf("\n");
+        MacUILib_printf("\n");  // newline after each row
     }
-    // New modularization ends here... the following logic belongs to both pathways
 
+    // Report score and lives
     MacUILib_printf("Score: %d", mechs->getScore());
     MacUILib_printf("\nLives: %d", player->getLives());
+
     
     // Report on how much longer you are dizzy, if necessary
     // converted from microseconds to seconds, also rounded up
@@ -171,6 +126,7 @@ void DrawScreen(void)
         MacUILib_printf("\nDizzy for %d seconds!", 1+player->getDizzyTime()/1000000);      
     }
 
+
     // Report on how much longer you are blind, if necessary
     // converted from microseconds to seconds, also rounded up
     if (player->getBlindTime() != 0)
@@ -178,8 +134,6 @@ void DrawScreen(void)
         MacUILib_printf("\nBlind for %d seconds!", 1+player->getBlindTime()/1000000);
     }
 
-
-    //MacUILib_printf("Player X: %d", player->getPlayerPos().pos->x);     // debug
 }
 
 void LoopDelay(void)
@@ -192,28 +146,25 @@ void LoopDelay(void)
 void CleanUp(void)
 {
     MacUILib_clearScreen();
-    if(mechs->getLoseFlagStatus() == true) 
+    if(mechs->getLoseFlagStatus() == true)      // This happens if you lose all lives or (in debug controls) use loseKey
     {
         MacUILib_printf("You lose!\n");
     }
-    
-    else if (player->getPlayerPos()->atCapacity())      // included this branch to avoid motion issues at 
+
+    else if (player->getPlayerPos()->atCapacity())      // included this branch to avoid motion issues at capacity
     {
         MacUILib_printf("You win! The snake has become so large that it cannot physically move.\n");
         MacUILib_printf("For the first time since its creation in 1976, the snake from Snake can finally rest peacefully.\n");
         MacUILib_printf("If you made it this far, we should have set the array capacity higher :)\n");
     }
     
-    else MacUILib_printf("Terminated successfully!\n");
+    else MacUILib_printf("Terminated successfully!\n");     // This is exclusive to the escape key
 
-    MacUILib_printf("Your final score: %d", mechs->getScore());
+    MacUILib_printf("Your final score: %d", mechs->getScore());     // Prints the final score
 
-    delete player;
-    
-    
+
+    delete player;    
     delete pFood;
-    
-
     delete mechs;
     
     
