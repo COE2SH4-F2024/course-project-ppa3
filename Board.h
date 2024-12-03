@@ -5,7 +5,7 @@ class Board {
     private:
         int boardX;
         int boardY;
-        char** boardData;
+        char** boardData;   // pointer to the actual array
 
     public:
         Board();
@@ -16,9 +16,9 @@ class Board {
 
         Board(int x, int y);    // alt constructor
 
-        int getBoardX() const;
+        int getBoardX() const;  // analogous to the method in GameMechs
         int getBoardY() const;
-        char getData(int x, int y) const;
+        char getData(int x, int y) const;   // gets data at a cell
 
         // Large scale operations
         void clearInterior();    // default ' '

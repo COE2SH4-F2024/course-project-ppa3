@@ -117,7 +117,7 @@ int Board::getBoardY() const
     return boardY;
 }
 
-char Board::getData(int x, int y) const
+char Board::getData(int x, int y) const     // get the char at a cell
 {
     return boardData[x][y];
 }
